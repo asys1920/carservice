@@ -10,4 +10,8 @@ class CarserviceApplicationTests {
 	void contextLoads() {
 	}
 
+	@Test
+	void testCreateCarEverythingEmpty() {
+
+	}
 }
