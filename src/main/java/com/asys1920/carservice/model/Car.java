@@ -1,13 +1,15 @@
 package com.asys1920.carservice.model;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
+import javax.persistence.*;
 
-@Getter
-@Setter
+@Entity
+@Data
 public class Car {
-    private String id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    private Long id;
     private String name;
     private String brand;
     private String model;
@@ -18,5 +20,8 @@ public class Car {
     private VehicleType vehicleType;
     private boolean isEol;
 
-    public String getId() { return id; }
+    public Car() {}
+    public Car(String name) {
+        this.name = name;
+    }
 }

@@ -1,9 +1,10 @@
 package com.asys1920.carservice.dto;
 
 import com.asys1920.carservice.model.VehicleType;
+import lombok.Data;
 
-public class CarDto {
-    private String id;
+@Data
+public class CarDTO {
     private String name;
     private String brand;
     private String model;

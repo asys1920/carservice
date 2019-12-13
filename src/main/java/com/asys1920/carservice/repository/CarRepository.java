@@ -1,18 +1,13 @@
 package com.asys1920.carservice.repository;
 
 import com.asys1920.carservice.model.Car;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 
-import java.util.HashMap;
-import java.util.Map;
+@Repository
+public interface CarRepository extends JpaRepository<Car, String> {
 
-public class CarRepository {
-    private Map<String, Car> hashMap = new HashMap<String, Car>();
-
-    public Car getCarById(String id) {
-        return hashMap.get(id);
-    }
-
-    public void addCar(Car car) {
-        hashMap.put(car.getId(), car);
-    }
+    Car getCarById(@Param("id") String id);
+    Car getCarByName(@Param("name") String name);
 }
