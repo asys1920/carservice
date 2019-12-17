@@ -8,6 +8,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface CarRepository extends JpaRepository<Car, String> {
 
-    Car getCarById(@Param("id") String id);
+    Car getCarById(@Param("id") Long id);
     Car getCarByName(@Param("name") String name);
 }

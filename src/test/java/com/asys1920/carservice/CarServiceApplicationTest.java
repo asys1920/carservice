@@ -9,9 +9,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 @SpringBootTest
 @ExtendWith(SpringExtension.class)
-class CarServiceApplicationTests {
+class CarServiceApplicationTest {
 	@Autowired
 	CarService carService;
 	@Test
@@ -19,17 +21,12 @@ class CarServiceApplicationTests {
 	}
 
 	@Test
-	void testCreateCarEverythingEmpty() {
-
-	}
-
-	@Test
-	void testCreateCarSimple(){
+	void getCarByName_shouldReturnCorrectCar(){
 		String name = "TestAuto2";
 		Car newCar = new Car(name);
 		carService.createCar(newCar);
 
 		Car retrievedCar = carService.getCarByName(name);
-		Assertions.assertEquals(newCar.getName(), retrievedCar.getName());
+		assertEquals(newCar, retrievedCar);
 	}
 }

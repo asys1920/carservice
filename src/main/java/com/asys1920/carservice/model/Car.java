@@ -20,7 +20,13 @@ public class Car {
     private VehicleType vehicleType;
     private boolean isEol;
 
-    public Car() {}
+    public Car() {
+        name = brand = model = yearOfConstruction = "";
+        numberOfDoors = numberOfSeats = 0;
+        rentingPricePerDay = 0.0;
+        vehicleType = null;
+        isEol = false;
+    }
     public Car(String name) {
         this.name = name;
     }

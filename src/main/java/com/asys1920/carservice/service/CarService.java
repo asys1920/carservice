@@ -5,18 +5,27 @@ import com.asys1920.carservice.repository.CarRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class CarService {
-    @Autowired
-    private CarRepository carRepository;
 
-    public void createCar(Car car) {
-        carRepository.save(car);
+    private final CarRepository carRepository;
+
+    @Autowired
+    public CarService(CarRepository carRepository) {
+        this.carRepository = carRepository;
     }
 
-    public Car getCarById(String id) {
+    public Car createCar(Car car) {
+        return carRepository.save(car);
+    }
+
+    public Car getCarById(Long id) {
         return carRepository.getCarById(id);
     }
+
+    public List<Car> getAllCars() { return carRepository.findAll(); }
 
     public Car getCarByName(String name) { return carRepository.getCarByName(name); }
 

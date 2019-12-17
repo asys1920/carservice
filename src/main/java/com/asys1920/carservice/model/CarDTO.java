@@ -1,10 +1,13 @@
-package com.asys1920.carservice.dto;
+package com.asys1920.carservice.model;
 
-import com.asys1920.carservice.model.VehicleType;
+
 import lombok.Data;
+
+import javax.validation.constraints.NotNull;
 
 @Data
 public class CarDTO {
+    @NotNull(message = "Car name cannot be empty!")
     private String name;
     private String brand;
     private String model;
