@@ -31,7 +31,7 @@ public class CarValidator implements Validator {
             errors.rejectValue(field, getInvalidationIndicator(field), getInvalidationMessage(field));
         }
         if (isStringInvalid(car.getYearOfConstruction())) {
-            String field = "userName";
+            String field = "yearOfConstruction";
             errors.rejectValue(field, getInvalidationIndicator(field), getInvalidationMessage(field));
         }
         if (isVehicleTypeInvalid(car.getVehicleType().toString())) {
@@ -39,11 +39,11 @@ public class CarValidator implements Validator {
             errors.rejectValue(field, getInvalidationIndicator(field), getInvalidationMessage(field));
         }
         if (isAmountInvalid(car.getNumberOfDoors())) {
-            String field = "userName";
+            String field = "numberOfDoors";
             errors.rejectValue(field, getInvalidationIndicator(field), getInvalidationMessage(field));
         }
         if (isAmountInvalid(car.getNumberOfSeats())) {
-            String field = "userName";
+            String field = "numberOfSeats";
             errors.rejectValue(field, getInvalidationIndicator(field), getInvalidationMessage(field));
         }
     }
