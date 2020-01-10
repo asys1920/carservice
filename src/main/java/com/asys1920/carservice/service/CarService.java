@@ -22,11 +22,11 @@ public class CarService {
     }
 
     public Car getCarById(Long id) {
-        return carRepository.getCarById(id);
+        return carRepository.findCarById(id);
     }
 
     public List<Car> getAllCars() { return carRepository.findAll(); }
 
-    public Car getCarByName(String name) { return carRepository.getCarByName(name); }
+    public Car getCarByName(String name) { return carRepository.findCarByName(name); }
 
 }
