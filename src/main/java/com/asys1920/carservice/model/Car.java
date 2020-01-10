@@ -17,14 +17,13 @@ public class Car {
     private int numberOfSeats;
     private int numberOfDoors;
     private double rentingPricePerDay;
-    private VehicleType vehicleType;
+    private String vehicleType;
     private boolean isEol;
 
     public Car() {
-        name = brand = model = yearOfConstruction = "";
+        name = brand = model = yearOfConstruction = vehicleType = "";
         numberOfDoors = numberOfSeats = 0;
         rentingPricePerDay = 0.0;
-        vehicleType = null;
         isEol = false;
     }
     public Car(String name) {

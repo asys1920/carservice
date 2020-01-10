@@ -1,6 +1,7 @@
 package com.asys1920.carservice.advice;
 
 import com.asys1920.carservice.model.Car;
+import com.asys1920.carservice.model.VehicleType;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
@@ -33,6 +34,10 @@ public class CarValidator implements Validator {
             String field = "userName";
             errors.rejectValue(field, getInvalidationIndicator(field), getInvalidationMessage(field));
         }
+        if (isVehicleTypeInvalid(car.getVehicleType().toString())) {
+            String field = "vehicleType";
+            errors.rejectValue(field, getInvalidationIndicator(field), getInvalidationMessage(field));
+        }
         if (isAmountInvalid(car.getNumberOfDoors())) {
             String field = "userName";
             errors.rejectValue(field, getInvalidationIndicator(field), getInvalidationMessage(field));
@@ -49,6 +54,15 @@ public class CarValidator implements Validator {
 
     private String getInvalidationMessage(String field) {
         return String.format("The submitted %s is not valid, please verify!", field);
+    }
+
+    private boolean isVehicleTypeInvalid(String vehicleType) {
+        for (VehicleType c : VehicleType.values()) {
+            if (c.name().equals(vehicleType)) {
+                return false;
+            }
+        }
+        return true;
     }
 
     private boolean isRentingPriceInvalid(double rentingPrice) {

@@ -9,6 +9,5 @@ import org.springframework.stereotype.Repository;
 @RepositoryRestResource(collectionResourceRel = "car", path = "car")
 public interface CarRepository extends JpaRepository<Car, Long> {
 
-    Car getCarById(@Param("id") Long id);
-    Car getCarByName(@Param("name") String name);
+    Car findCarByName(@Param("name") String name);
 }
