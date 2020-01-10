@@ -26,7 +26,4 @@ public class Car {
         rentingPricePerDay = 0.0;
         isEol = false;
     }
-    public Car(String name) {
-        this.name = name;
-    }
 }

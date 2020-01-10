@@ -1,27 +1,24 @@
 package com.asys1920.carservice;
 
+
 import com.asys1920.carservice.model.Car;
 import com.asys1920.carservice.repository.CarRepository;
 import org.json.JSONObject;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+
 
 @SpringBootTest
 @AutoConfigureMockMvc
 class CarServiceApplicationTest {
-
     @Autowired
     private MockMvc mockMvc;
 
@@ -34,7 +31,6 @@ class CarServiceApplicationTest {
                 .andExpect(status().isOk());
     }
 
-
     @Test
     public void should_ReturnErrorMessage_When_Post_InvalidRentingPrice() throws Exception {
         JSONObject body = new JSONObject();
@@ -42,10 +38,11 @@ class CarServiceApplicationTest {
         body.put("brand", "VW");
         body.put("model", "Golf 6");
         body.put("yearOfConstruction", "2012");
+        body.put("numberOfDoors", "5");
         body.put("numberOfSeats", "5");
         body.put("vehicleType", "SALOON");
-        body.put("rentingPricePerDay", "-5");
-        body.put("isEol", "false");
+        body.put("rentingPricePerDay", "-5.0");
+        body.put("eol", "false");
         mockMvc.perform(post("/api/car")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(body.toString())
@@ -61,10 +58,11 @@ class CarServiceApplicationTest {
         body.put("brand", "VW");
         body.put("model", "Golf 6");
         body.put("yearOfConstruction", "2012");
+        body.put("numberOfDoors", "5");
         body.put("numberOfSeats", "5");
         body.put("vehicleType", "falscherTyp");
-        body.put("rentingPricePerDay", "5");
-        body.put("isEol", "false");
+        body.put("rentingPricePerDay", "5.0");
+        body.put("eol", "false");
         mockMvc.perform(post("/api/car")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(body.toString())
@@ -79,10 +77,11 @@ class CarServiceApplicationTest {
         body.put("brand", "VW");
         body.put("model", "Golf 6");
         body.put("yearOfConstruction", "2012");
+        body.put("numberOfDoors", "5");
         body.put("numberOfSeats", "5");
         body.put("vehicleType", "SALOON");
-        body.put("rentingPricePerDay", "5");
-        body.put("isEol", "false");
+        body.put("rentingPricePerDay", "5.0");
+        body.put("eol", "false");
         mockMvc.perform(post("/api/car")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(body.toString())
@@ -93,10 +92,11 @@ class CarServiceApplicationTest {
                 .andExpect(jsonPath("$.brand").value(body.get("brand")))
                 .andExpect(jsonPath("$.model").value(body.get("model")))
                 .andExpect(jsonPath("$.yearOfConstruction").value(body.get("yearOfConstruction")))
+                .andExpect(jsonPath("$.numberOfDoors").value(body.get("numberOfDoors")))
                 .andExpect(jsonPath("$.numberOfSeats").value(body.get("numberOfSeats")))
                 .andExpect(jsonPath("$.vehicleType").value(body.get("vehicleType")))
                 .andExpect(jsonPath("$.rentingPricePerDay").value(body.get("rentingPricePerDay")))
-                .andExpect(jsonPath("$.isEol").value(body.get("isEol")));
+                .andExpect(jsonPath("$.eol").value(body.get("eol")));
     }
 
     @Test
@@ -106,6 +106,7 @@ class CarServiceApplicationTest {
         c.setBrand("VW");
         c.setModel("Golf 6");
         c.setYearOfConstruction("2012");
+        c.setNumberOfDoors(5);
         c.setNumberOfSeats(5);
         c.setVehicleType("SALOON");
         c.setRentingPricePerDay(5.0);
@@ -120,10 +121,11 @@ class CarServiceApplicationTest {
                 .andExpect(jsonPath("$.brand").value("VW"))
                 .andExpect(jsonPath("$.model").value("Golf 6"))
                 .andExpect(jsonPath("$.yearOfConstruction").value("2012"))
+                .andExpect(jsonPath("$.numberOfDoors").value("5"))
                 .andExpect(jsonPath("$.numberOfSeats").value("5"))
                 .andExpect(jsonPath("$.vehicleType").value("SALOON"))
                 .andExpect(jsonPath("$.rentingPricePerDay").value("5.0"))
-                .andExpect(jsonPath("$.isEol").value("false"));
+                .andExpect(jsonPath("$.eol").value("false"));
     }
 
 

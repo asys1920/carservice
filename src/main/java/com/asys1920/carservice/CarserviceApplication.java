@@ -10,8 +10,8 @@ import springfox.documentation.spring.data.rest.configuration.SpringDataRestConf
 import springfox.documentation.swagger2.annotations.EnableSwagger2WebMvc;
 
 @SpringBootApplication
-@EnableSwagger2WebMvc
-@Import(SpringDataRestConfiguration.class)
+//@EnableSwagger2WebMvc
+//@Import(SpringDataRestConfiguration.class)
 public class CarserviceApplication implements RepositoryRestConfigurer {
 
 	public static void main(String[] args) {
