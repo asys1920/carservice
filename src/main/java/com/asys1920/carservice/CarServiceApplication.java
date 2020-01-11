@@ -1,6 +1,7 @@
 package com.asys1920.carservice;
 
 import com.asys1920.carservice.advice.CarValidator;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Import;
@@ -10,17 +11,20 @@ import springfox.documentation.spring.data.rest.configuration.SpringDataRestConf
 import springfox.documentation.swagger2.annotations.EnableSwagger2WebMvc;
 
 @SpringBootApplication
-//@EnableSwagger2WebMvc
-//@Import(SpringDataRestConfiguration.class)
-public class CarserviceApplication implements RepositoryRestConfigurer {
+@EnableSwagger2WebMvc
+@Import(SpringDataRestConfiguration.class)
+public class CarServiceApplication implements RepositoryRestConfigurer {
+
+	@Autowired
+	private CarValidator carValidator;
 
 	public static void main(String[] args) {
-		SpringApplication.run(CarserviceApplication.class, args);
+		SpringApplication.run(CarServiceApplication.class, args);
 	}
 
 	@Override
-	public void configureValidatingRepositoryEventListener(ValidatingRepositoryEventListener v) {
-		v.addValidator("beforeCreate", new CarValidator());
-		v.addValidator("beforeSave", new CarValidator());
+	public void configureValidatingRepositoryEventListener(ValidatingRepositoryEventListener validatingListener) {
+		validatingListener.addValidator("beforeCreate", carValidator);
+		validatingListener.addValidator("beforeSave", carValidator);
 	}
 }

@@ -2,17 +2,20 @@ package com.asys1920.carservice.advice;
 
 import com.asys1920.carservice.model.Car;
 import com.asys1920.carservice.model.VehicleType;
+import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
 import java.util.Calendar;
 
+@Component
 public class CarValidator implements Validator {
     @Override
     public boolean supports(Class<?> aClass) {
         return Car.class.equals(aClass);
     }
 
+    //TODO: mit Annotationen im Model arbeiten anstatt Validator zu verwenden
     @Override
     public void validate(Object o, Errors errors) {
         Car car = (Car) o;
@@ -78,12 +81,12 @@ public class CarValidator implements Validator {
         return amount < 1;
     }
 
-    private boolean isYearOfConstructionInvalid(String yearOfConstruction) {
-        if (isStringInvalid(yearOfConstruction)) {
+    private boolean isYearOfConstructionInvalid(int yearOfConstruction) {
+        if (yearOfConstruction < 0) {
             return true;
         }
         Calendar now = Calendar.getInstance();
-        if (Integer.parseInt(yearOfConstruction) > now.get(Calendar.YEAR)) {
+        if (yearOfConstruction > now.get(Calendar.YEAR)) {
             return true;
         }
         return false;

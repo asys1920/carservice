@@ -16,7 +16,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 
-@SpringBootTest
+@SpringBootTest(classes = CarServiceApplication.class)
 @AutoConfigureMockMvc
 class CarServiceApplicationTest {
     @Autowired
@@ -28,10 +28,11 @@ class CarServiceApplicationTest {
     @Test
     public void should_ReturnValid_When_Get_ValidRequest() throws Exception {
         mockMvc.perform(get("/api/car"))
-                .andExpect(status().isOk());
+                .andExpect(status().isOk()); //TODO: pruefen auf response-body (leere Liste)
     }
 
     @Test
+    //TODO: parameterisierter Test
     public void should_ReturnErrorMessage_When_Post_InvalidRentingPrice() throws Exception {
         JSONObject body = new JSONObject();
         body.put("name", "VW Golf 6");
@@ -41,13 +42,13 @@ class CarServiceApplicationTest {
         body.put("numberOfDoors", "5");
         body.put("numberOfSeats", "5");
         body.put("vehicleType", "SALOON");
-        body.put("rentingPricePerDay", "-5.0");
+        body.put("rentingPricePerDay", "-5.0"); // is invalid
         body.put("eol", "false");
         mockMvc.perform(post("/api/car")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(body.toString())
                 .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isBadRequest()); //TODO: body pruefen (VALIDATION ERROR)
     }
 
 
@@ -60,7 +61,7 @@ class CarServiceApplicationTest {
         body.put("yearOfConstruction", "2012");
         body.put("numberOfDoors", "5");
         body.put("numberOfSeats", "5");
-        body.put("vehicleType", "falscherTyp");
+        body.put("vehicleType", "falscherTyp"); // is invalid
         body.put("rentingPricePerDay", "5.0");
         body.put("eol", "false");
         mockMvc.perform(post("/api/car")
@@ -101,31 +102,33 @@ class CarServiceApplicationTest {
 
     @Test
     public void should_GetUser_When_Post_ValidRequest() throws Exception {
-        Car c = new Car();
-        c.setName("VW Golf 6");
-        c.setBrand("VW");
-        c.setModel("Golf 6");
-        c.setYearOfConstruction("2012");
-        c.setNumberOfDoors(5);
-        c.setNumberOfSeats(5);
-        c.setVehicleType("SALOON");
-        c.setRentingPricePerDay(5.0);
-        c.setEol(false);
-        carRepository.save(c);
+        Car car = Car.builder()
+                .name("VW Golf 6")
+                .brand("VW")
+                .model("Golf 6")
+                .yearOfConstruction(2012)
+                .numberOfDoors(5)
+                .numberOfSeats(5)
+                .vehicleType("SALOON")
+                .rentingPricePerDay(5.0)
+                .isEol(true)
+                .build();
+        // Car car2 = car.withBrand("Bla"); //TODO: @With-Example entfernen
+        carRepository.save(car);
 
-        mockMvc.perform(get("/api/car/" + c.getId())
+        mockMvc.perform(get("/api/car/" + car.getId())
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.name").value("VW Golf 6"))
-                .andExpect(jsonPath("$.brand").value("VW"))
-                .andExpect(jsonPath("$.model").value("Golf 6"))
-                .andExpect(jsonPath("$.yearOfConstruction").value("2012"))
-                .andExpect(jsonPath("$.numberOfDoors").value("5"))
-                .andExpect(jsonPath("$.numberOfSeats").value("5"))
-                .andExpect(jsonPath("$.vehicleType").value("SALOON"))
-                .andExpect(jsonPath("$.rentingPricePerDay").value("5.0"))
-                .andExpect(jsonPath("$.eol").value("false"));
+                .andExpect(jsonPath("$.name").value(car.getName()))
+                .andExpect(jsonPath("$.brand").value(car.getBrand()))
+                .andExpect(jsonPath("$.model").value(car.getModel()))
+                .andExpect(jsonPath("$.yearOfConstruction").value(car.getYearOfConstruction()))
+                .andExpect(jsonPath("$.numberOfDoors").value(car.getNumberOfDoors()))
+                .andExpect(jsonPath("$.numberOfSeats").value(car.getNumberOfSeats()))
+                .andExpect(jsonPath("$.vehicleType").value(car.getVehicleType()))
+                .andExpect(jsonPath("$.rentingPricePerDay").value(car.getRentingPricePerDay()))
+                .andExpect(jsonPath("$.eol").value(car.isEol()));
     }
 
 
