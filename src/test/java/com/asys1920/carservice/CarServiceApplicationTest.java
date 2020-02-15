@@ -2,6 +2,7 @@ package com.asys1920.carservice;
 
 
 import com.asys1920.carservice.model.Car;
+import com.asys1920.carservice.model.VehicleType;
 import com.asys1920.carservice.repository.CarRepository;
 import org.json.JSONObject;
 import org.junit.jupiter.api.Test;
@@ -100,6 +101,8 @@ class CarServiceApplicationTest {
                 .andExpect(jsonPath("$.eol").value(body.get("eol")));
     }
 
+    //TODO: Give Tests fitting Names
+    //TODO: Fix this Test:
     @Test
     public void should_GetUser_When_Post_ValidRequest() throws Exception {
         Car car = Car.builder()
@@ -109,7 +112,7 @@ class CarServiceApplicationTest {
                 .yearOfConstruction(2012)
                 .numberOfDoors(5)
                 .numberOfSeats(5)
-                .vehicleType("SALOON")
+                .vehicleType(VehicleType.SALOON)
                 .rentingPricePerDay(5.0)
                 .isEol(true)
                 .build();
@@ -126,7 +129,7 @@ class CarServiceApplicationTest {
                 .andExpect(jsonPath("$.yearOfConstruction").value(car.getYearOfConstruction()))
                 .andExpect(jsonPath("$.numberOfDoors").value(car.getNumberOfDoors()))
                 .andExpect(jsonPath("$.numberOfSeats").value(car.getNumberOfSeats()))
-                .andExpect(jsonPath("$.vehicleType").value(car.getVehicleType()))
+                .andExpect(jsonPath("$.vehicleType").value(car.getVehicleType().name()))
                 .andExpect(jsonPath("$.rentingPricePerDay").value(car.getRentingPricePerDay()))
                 .andExpect(jsonPath("$.eol").value(car.isEol()));
     }
