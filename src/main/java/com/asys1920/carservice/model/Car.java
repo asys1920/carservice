@@ -29,7 +29,7 @@ public class Car {
     @Positive(message = "A Car has to have at least one door!")
     private int numberOfDoors;
     @Positive(message = "Renting Price must be > 0!")
-    private double rentingPricePerDay; //TODO: muss nicht in Car-Objekt gespeichert werden (Business Logik)
+    private double rentingPricePerDay;
     private VehicleType vehicleType;
     private boolean isEol;
 }
