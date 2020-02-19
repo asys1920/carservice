@@ -1,7 +1,7 @@
 package com.asys1920.carservice.service;
 
-import com.asys1920.carservice.model.Car;
 import com.asys1920.carservice.repository.CarRepository;
+import com.asys1920.model.Car;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,5 +24,9 @@ public class CarService {
 
     public Car getCar(long id) {
         return carRepository.findById(id).get();
+    }
+
+    public void deleteCar(long id) {
+        carRepository.deleteById(id);
     }
 }

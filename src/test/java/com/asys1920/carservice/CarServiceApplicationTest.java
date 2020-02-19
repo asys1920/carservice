@@ -1,9 +1,9 @@
 package com.asys1920.carservice;
 
 
-import com.asys1920.carservice.model.Car;
-import com.asys1920.carservice.model.VehicleType;
 import com.asys1920.carservice.repository.CarRepository;
+import com.asys1920.model.Car;
+import com.asys1920.model.VehicleType;
 import org.json.JSONObject;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
