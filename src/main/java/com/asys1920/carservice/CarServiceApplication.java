@@ -1,6 +1,5 @@
 package com.asys1920.carservice;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -18,9 +17,11 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2WebMvc;
 @Import(SpringDataRestConfiguration.class)
 public class CarServiceApplication implements RepositoryRestConfigurer {
 
-	@Qualifier("defaultValidator")
-	@Autowired
 	private Validator validator;
+
+	public CarServiceApplication(@Qualifier("defaultValidator") Validator validator) {
+		this.validator = validator;
+	}
 
 	public static void main(String[] args) {
 		SpringApplication.run(CarServiceApplication.class, args);
