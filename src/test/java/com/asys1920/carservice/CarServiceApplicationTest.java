@@ -115,7 +115,7 @@ class CarServiceApplicationTest {
                 .numberOfDoors(5)
                 .numberOfSeats(5)
                 .vehicleType(VehicleType.SALOON)
-                .rentingPricePerDay(5.0)
+//                .rentingPricePerDay(5.0)
                 .isEol(true)
                 .build();
         // Car car2 = car.withBrand("Bla"); //TODO: @With-Example entfernen
@@ -132,7 +132,7 @@ class CarServiceApplicationTest {
                 .andExpect(jsonPath("$.numberOfDoors").value(car.getNumberOfDoors()))
                 .andExpect(jsonPath("$.numberOfSeats").value(car.getNumberOfSeats()))
                 .andExpect(jsonPath("$.vehicleType").value(car.getVehicleType().name()))
-                .andExpect(jsonPath("$.rentingPricePerDay").value(car.getRentingPricePerDay()))
+//                .andExpect(jsonPath("$.rentingPricePerDay").value(car.getRentingPricePerDay()))
                 .andExpect(jsonPath("$.eol").value(car.isEol()));
     }
 
