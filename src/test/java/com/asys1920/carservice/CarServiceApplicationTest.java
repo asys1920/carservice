@@ -4,6 +4,7 @@ package com.asys1920.carservice;
 import com.asys1920.carservice.repository.CarRepository;
 import com.asys1920.model.Car;
 import com.asys1920.model.VehicleType;
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,10 +12,12 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
 @SpringBootTest(classes = CarServiceApplication.class)
@@ -27,100 +30,9 @@ class CarServiceApplicationTest {
     private CarRepository carRepository;
 
     @Test
-    public void should_ReturnValid_When_Get_ValidRequest() throws Exception {
-        mockMvc.perform(get("/api/car"))
-                .andExpect(status().isOk()); //TODO: pruefen auf response-body (leere Liste)
-    }
-
-    @Test
-    //TODO: parameterisierter Test
-    public void should_ReturnErrorMessage_When_Post_InvalidRentingPrice() throws Exception {
-        JSONObject body = new JSONObject();
-        body.put("name", "VW Golf 6");
-        body.put("brand", "VW");
-        body.put("model", "Golf 6");
-        body.put("yearOfConstruction", "2012");
-        body.put("numberOfDoors", "5");
-        body.put("numberOfSeats", "5");
-        body.put("vehicleType", "SALOON");
-        body.put("rentingPricePerDay", "-5.0"); // is invalid
-        body.put("eol", "false");
-        mockMvc.perform(post("/api/car")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(body.toString())
-                .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isBadRequest()); //TODO: body pruefen (VALIDATION ERROR)
-    }
-
-
-    @Test
-    public void should_ReturnErrorMessage_When_Post_InvalidVehicleType() throws Exception {
-        JSONObject body = new JSONObject();
-        body.put("name", "VW Golf 6");
-        body.put("brand", "VW");
-        body.put("model", "Golf 6");
-        body.put("yearOfConstruction", "2012");
-        body.put("numberOfDoors", "5");
-        body.put("numberOfSeats", "5");
-        body.put("vehicleType", "falscherTyp"); // is invalid
-        body.put("rentingPricePerDay", "5.0");
-        body.put("eol", "false");
-        mockMvc.perform(post("/api/car")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(body.toString())
-                .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isBadRequest());
-    }
-
-    @Test
-    public void should_CreateUser_When_Post_ValidRequest() throws Exception {
-        JSONObject body = new JSONObject();
-        body.put("name", "VW Golf 6");
-        body.put("brand", "VW");
-        body.put("model", "Golf 6");
-        body.put("yearOfConstruction", "2012");
-        body.put("numberOfDoors", "5");
-        body.put("numberOfSeats", "5");
-        body.put("vehicleType", "SALOON");
-        body.put("rentingPricePerDay", "5.0");
-        body.put("eol", "false");
-        mockMvc.perform(post("/api/car")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(body.toString())
-                .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isCreated())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.name").value(body.get("name")))
-                .andExpect(jsonPath("$.brand").value(body.get("brand")))
-                .andExpect(jsonPath("$.model").value(body.get("model")))
-                .andExpect(jsonPath("$.yearOfConstruction").value(body.get("yearOfConstruction")))
-                .andExpect(jsonPath("$.numberOfDoors").value(body.get("numberOfDoors")))
-                .andExpect(jsonPath("$.numberOfSeats").value(body.get("numberOfSeats")))
-                .andExpect(jsonPath("$.vehicleType").value(body.get("vehicleType")))
-                .andExpect(jsonPath("$.rentingPricePerDay").value(body.get("rentingPricePerDay")))
-                .andExpect(jsonPath("$.eol").value(body.get("eol")));
-    }
-
-    //TODO: Give Tests fitting Names
-    //TODO: Fix this Test:
-    @Test
-    public void should_GetUser_When_Post_ValidRequest() throws Exception {
-        Car car = Car.builder()
-                .name("VW Golf 6")
-                .brand("VW")
-                .model("Golf 6")
-                .yearOfConstruction(2012)
-                .numberOfDoors(5)
-                .numberOfSeats(5)
-                .vehicleType(VehicleType.SALOON)
-                .rentingPricePerDay(5.0)
-                .isEol(true)
-                .build();
-        // Car car2 = car.withBrand("Bla"); //TODO: @With-Example entfernen
-        carRepository.save(car);
-
-        mockMvc.perform(get("/api/car/" + car.getId())
-                .contentType(MediaType.APPLICATION_JSON)
+    public void should_ReturnValidCar_When_RequestingValidId() throws Exception {
+        Car car = createdCar();
+        mockMvc.perform(get("/cars/" + car.getId())
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name").value(car.getName()))
@@ -129,11 +41,176 @@ class CarServiceApplicationTest {
                 .andExpect(jsonPath("$.yearOfConstruction").value(car.getYearOfConstruction()))
                 .andExpect(jsonPath("$.numberOfDoors").value(car.getNumberOfDoors()))
                 .andExpect(jsonPath("$.numberOfSeats").value(car.getNumberOfSeats()))
-                .andExpect(jsonPath("$.vehicleType").value(car.getVehicleType().name()))
-                .andExpect(jsonPath("$.rentingPricePerDay").value(car.getRentingPricePerDay()))
-                .andExpect(jsonPath("$.eol").value(car.isEol()));
+                .andExpect(jsonPath("$.carBaseRentPrice").value(car.getCarBaseRentPrice()))
+                .andExpect(jsonPath("$.vehicleType").value(car.getVehicleType().toString()));
+    }
+
+    @Test
+    void should_ReturnErrorMessage_When_RequestingNotExistingCar() throws Exception {
+        mockMvc.perform(get("/cars/" + getRandomId())
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    public void should_ReturnValidCar_When_CreatingValidCar() throws Exception {
+        JSONObject body = getValidCar();
+
+        MvcResult result = mockMvc.perform(post("/cars/")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(body.toString())
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.name").value(body.get("name")))
+                .andExpect(jsonPath("$.brand").value(body.get("brand")))
+                .andExpect(jsonPath("$.model").value(body.get("model")))
+                .andExpect(jsonPath("$.yearOfConstruction").value(body.getInt("yearOfConstruction")))
+                .andExpect(jsonPath("$.numberOfDoors").value(body.getInt("numberOfDoors")))
+                .andExpect(jsonPath("$.numberOfSeats").value(body.getInt("numberOfSeats")))
+                .andExpect(jsonPath("$.carBaseRentPrice").value(body.getDouble("carBaseRentPrice")))
+                .andExpect(jsonPath("$.vehicleType").value(body.get("vehicleType")))
+                .andReturn();
+    }
+
+    @Test
+    public void should_ReturnErrorMessage_When_CreatingInvalidCar_NameMissing() throws Exception {
+        JSONObject body = getValidCar();
+        body.put("name", null);
+        mockMvc.perform(post("/cars/")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(body.toString())
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void should_ReturnErrorMessage_When_CreatingInvalidCar_BrandMissing() throws Exception {
+        JSONObject body = getValidCar();
+        body.put("brand", null);
+        mockMvc.perform(post("/cars/")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(body.toString())
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void should_ReturnErrorMessage_When_CreatingInvalidCar_ModelMissing() throws Exception {
+        JSONObject body = getValidCar();
+        body.put("model", null);
+        mockMvc.perform(post("/cars/")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(body.toString())
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void should_ReturnErrorMessage_When_CreatingInvalidCar_YearOfConstructionNegative() throws Exception {
+        JSONObject body = getValidCar();
+        body.put("yearOfConstruction", -1);
+        mockMvc.perform(post("/cars/")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(body.toString())
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void should_ReturnErrorMessage_When_CreatingInvalidCar_CarBaseRentPriceNegative() throws Exception {
+        JSONObject body = getValidCar();
+        body.put("carBaseRentPrice", -1.0);
+        mockMvc.perform(post("/cars/")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(body.toString())
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void should_ReturnErrorMessage_When_CreatingInvalidCar_NumberOfDoorsNegative() throws Exception {
+        JSONObject body = getValidCar();
+        body.put("numberOfDoors", -1);
+        mockMvc.perform(post("/cars/")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(body.toString())
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void should_ReturnErrorMessage_When_CreatingInvalidCar_NumberOfSeatsNegative() throws Exception {
+        JSONObject body = getValidCar();
+        body.put("numberOfSeats", -1);
+        mockMvc.perform(post("/cars/")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(body.toString())
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void should_ReturnErrorMessage_When_CreatingInvalidCar_UnknownVehicleType() throws Exception {
+        JSONObject body = getValidCar();
+        body.put("vehicleType", "garbage");
+        mockMvc.perform(post("/cars/")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(body.toString())
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void shouldReturnErrorMessage_When_CreatingCar_NameAlreadyExists() throws Exception {
+        JSONObject body = getValidCar();
+        body.put("name", "TestCar2");
+
+        mockMvc.perform(post("/cars/")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(body.toString())
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isCreated());
+
+        mockMvc.perform(post("/cars")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(body.toString())
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isConflict());
     }
 
 
+
+    private JSONObject getValidCar() throws JSONException {
+        JSONObject body = new JSONObject();
+        body.put("name", "TestCar");
+        body.put("brand", "TestBrand");
+        body.put("model", "TestModel");
+        body.put("yearOfConstruction", 2010);
+        body.put("numberOfDoors", 4);
+        body.put("numberOfSeats", 4);
+        body.put("carBaseRentPrice", 10.0);
+        body.put("vehicleType", "SUV");
+        return body;
+    }
+
+    private int getRandomId() {
+        return (int) (Math.random() * Integer.MAX_VALUE);
+    }
+
+
+    private Car createdCar() throws JSONException {
+        Car car = new Car();
+        JSONObject validCar = getValidCar();
+        car.setName(validCar.getString("name"));
+        car.setBrand(validCar.getString("brand"));
+        car.setModel(validCar.getString("model"));
+        car.setYearOfConstruction(validCar.getInt("yearOfConstruction"));
+        car.setNumberOfDoors(validCar.getInt("numberOfDoors"));
+        car.setNumberOfSeats(validCar.getInt("numberOfSeats"));
+        car.setCarBaseRentPrice(validCar.getDouble("carBaseRentPrice"));
+        car.setVehicleType(VehicleType.get(validCar.getString("vehicleType")));
+        carRepository.save(car);
+        return car;
+    }
 
 }
