@@ -2,6 +2,7 @@ package com.asys1920.carservice.advice;
 
 import com.asys1920.carservice.exceptions.CarAlreadyExistsException;
 import com.asys1920.carservice.exceptions.IllegalVehicleTypeException;
+import com.asys1920.carservice.exceptions.ValidationException;
 import lombok.Data;
 import net.minidev.json.JSONObject;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
@@ -50,6 +51,12 @@ public class ExceptionAdvice extends ResponseEntityExceptionHandler {
         JSONObject response = new JSONObject();
         response.put("message", ex.getMessage());
         return response.toJSONString();
+    }
+
+    @ExceptionHandler(ValidationException.class)
+    @ResponseBody
+    public ResponseEntity<String> handleValidationException(Exception ex) {
+        return new ResponseEntity<>(jsonFromException(ex), HttpStatus.BAD_REQUEST);
     }
 
     @Data

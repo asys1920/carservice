@@ -8,30 +8,40 @@ import com.asys1920.dto.CarDTO;
 import com.asys1920.mapper.CarMapper;
 import com.asys1920.model.Car;
 import com.asys1920.model.VehicleType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.ConstraintViolation;
-import javax.validation.Valid;
 import javax.validation.Validation;
 import java.util.List;
 import java.util.Set;
 
 @RestController
 public class CarController {
+
     private final CarService carService;
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(CarController.class);
+
 
     public CarController(CarService carService) {
         this.carService = carService;
     }
 
-    @PostMapping("/cars")
-    public ResponseEntity<CarDTO> createCar(@Valid @RequestBody CarDTO carDTO) throws ValidationException, IllegalVehicleTypeException, CarAlreadyExistsException {
+    private void validateCarDTO(CarDTO carDTO) throws ValidationException {
         Set<ConstraintViolation<CarDTO>> validate = Validation.buildDefaultValidatorFactory().getValidator().validate(carDTO);
         if (!validate.isEmpty()) {
             throw new ValidationException(validate);
         }
+    }
+
+    @PostMapping("/cars")
+    public ResponseEntity<CarDTO> createCar(@RequestBody CarDTO carDTO) throws ValidationException, IllegalVehicleTypeException, CarAlreadyExistsException {
+        validateCarDTO(carDTO);
+
 
         if(!VehicleType.contains(carDTO.getVehicleType())) {
             throw new IllegalVehicleTypeException();
