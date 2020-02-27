@@ -5,9 +5,13 @@ import com.asys1920.carservice.exceptions.IllegalVehicleTypeException;
 import com.asys1920.carservice.exceptions.ValidationException;
 import com.asys1920.carservice.service.CarService;
 import com.asys1920.dto.CarDTO;
+import com.asys1920.dto.UserDTO;
 import com.asys1920.mapper.CarMapper;
 import com.asys1920.model.Car;
 import com.asys1920.model.VehicleType;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -39,17 +43,23 @@ public class CarController {
         }
     }
 
+    @ApiOperation(value = "Create a new car", response = CarDTO.class)
+    @ApiResponses(value = {
+            @ApiResponse(code = 201, message = "Successfully created car"),
+            @ApiResponse(code = 401, message = "You are not authorized to view the resource"),
+            @ApiResponse(code = 403, message = "Accessing the resource you were trying to reach is forbidden"),
+            @ApiResponse(code = 404, message = "The resource you were trying to reach is not found")})
     @PostMapping("/cars")
     public ResponseEntity<CarDTO> createCar(@RequestBody CarDTO carDTO) throws ValidationException, IllegalVehicleTypeException, CarAlreadyExistsException {
         validateCarDTO(carDTO);
 
 
-        if(!VehicleType.contains(carDTO.getVehicleType())) {
+        if (!VehicleType.contains(carDTO.getVehicleType())) {
             throw new IllegalVehicleTypeException();
         }
 
         Car carTemp = CarMapper.INSTANCE.carDTOToCar(carDTO);
-        if(carService.carExists(carTemp)) {
+        if (carService.carExists(carTemp)) {
             throw new CarAlreadyExistsException();
         }
 
@@ -58,6 +68,12 @@ public class CarController {
         return new ResponseEntity<>(CarMapper.INSTANCE.carToCarDTO(car), HttpStatus.CREATED);
     }
 
+    @ApiOperation(value = "Get a existing car", response = CarDTO.class)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Successfully fetched car"),
+            @ApiResponse(code = 401, message = "You are not authorized to view the resource"),
+            @ApiResponse(code = 403, message = "Accessing the resource you were trying to reach is forbidden"),
+            @ApiResponse(code = 404, message = "The resource you were trying to reach is not found")})
     @GetMapping("/cars/{id}")
     public ResponseEntity<CarDTO> getCar(@PathVariable long id) {
         Car car = carService.getCar(id);
@@ -69,6 +85,12 @@ public class CarController {
     @Value("${beispiel.config}")
     String beispielConfig;
 
+    @ApiOperation(value = "Get all existing cars", response = CarDTO.class, responseContainer = "List")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Successfully fetched cars"),
+            @ApiResponse(code = 401, message = "You are not authorized to view the resource"),
+            @ApiResponse(code = 403, message = "Accessing the resource you were trying to reach is forbidden")
+    })
     @GetMapping("/cars")
     public ResponseEntity<List<CarDTO>> getAllCars() {
         LOGGER.info("Beispiel Config: " + beispielConfig);
@@ -76,6 +98,12 @@ public class CarController {
         return new ResponseEntity<>(CarMapper.INSTANCE.listCarToCarDTOs(cars), HttpStatus.OK);
     }
 
+    @ApiOperation(value = "Delete a existing car", response = UserDTO.class)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Successfully deleted the user"),
+            @ApiResponse(code = 401, message = "You are not authorized to view the resource"),
+            @ApiResponse(code = 403, message = "Accessing the resource you were trying to reach is forbidden"),
+            @ApiResponse(code = 404, message = "The resource you were trying to reach is not found")})
     @DeleteMapping("/cars/{id}")
     public ResponseEntity<String> deleteCar(@PathVariable long id) {
         carService.deleteCar(id);
