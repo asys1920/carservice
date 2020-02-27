@@ -5,6 +5,7 @@ import com.asys1920.model.Car;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CarService {
@@ -12,6 +13,11 @@ public class CarService {
 
     public CarService(CarRepository carRepository) {
         this.carRepository = carRepository;
+    }
+
+    public boolean carExists(Car car) {
+        Optional<Car> foundCar = carRepository.findByName(car.getName());
+        return foundCar.isPresent();
     }
 
     public Car createCar(Car car) {
