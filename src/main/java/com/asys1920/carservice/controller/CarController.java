@@ -7,6 +7,7 @@ import com.asys1920.mapper.CarMapper;
 import com.asys1920.model.Car;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -51,8 +52,14 @@ public class CarController {
         return new ResponseEntity<>(CarMapper.INSTANCE.carToCarDTO(car), HttpStatus.OK);
     }
 
+
+    //TODO: Beispiel für Config über Environment Variables!!
+    @Value("${beispiel.config}")
+    String beispielConfig;
+
     @GetMapping("/cars")
     public ResponseEntity<List<CarDTO>> getAllCars() {
+        LOGGER.info("Beispiel Config: " + beispielConfig);
         List<Car> cars = carService.getAllCars();
         return new ResponseEntity<>(CarMapper.INSTANCE.listCarToCarDTOs(cars), HttpStatus.OK);
     }
