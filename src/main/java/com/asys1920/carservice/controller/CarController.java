@@ -27,6 +27,7 @@ import java.util.Set;
 @RestController
 public class CarController {
 
+    private static final String PATH = "/cars";
     private final CarService carService;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CarController.class);
@@ -49,7 +50,7 @@ public class CarController {
             @ApiResponse(code = 401, message = "You are not authorized to view the resource"),
             @ApiResponse(code = 403, message = "Accessing the resource you were trying to reach is forbidden"),
             @ApiResponse(code = 404, message = "The resource you were trying to reach is not found")})
-    @PostMapping("/cars")
+    @PostMapping(PATH)
     public ResponseEntity<CarDTO> createCar(@RequestBody CarDTO carDTO) throws ValidationException, IllegalVehicleTypeException, CarAlreadyExistsException {
         validateCarDTO(carDTO);
 
@@ -74,7 +75,7 @@ public class CarController {
             @ApiResponse(code = 401, message = "You are not authorized to view the resource"),
             @ApiResponse(code = 403, message = "Accessing the resource you were trying to reach is forbidden"),
             @ApiResponse(code = 404, message = "The resource you were trying to reach is not found")})
-    @GetMapping("/cars/{id}")
+    @GetMapping(PATH + "/{id}")
     public ResponseEntity<CarDTO> getCar(@PathVariable long id) {
         Car car = carService.getCar(id);
         return new ResponseEntity<>(CarMapper.INSTANCE.carToCarDTO(car), HttpStatus.OK);
@@ -86,7 +87,7 @@ public class CarController {
             @ApiResponse(code = 401, message = "You are not authorized to view the resource"),
             @ApiResponse(code = 403, message = "Accessing the resource you were trying to reach is forbidden")
     })
-    @GetMapping("/cars")
+    @GetMapping(PATH)
     public ResponseEntity<List<CarDTO>> getAllCars() {
         List<Car> cars = carService.getAllCars();
         return new ResponseEntity<>(CarMapper.INSTANCE.listCarToCarDTOs(cars), HttpStatus.OK);
@@ -98,7 +99,7 @@ public class CarController {
             @ApiResponse(code = 401, message = "You are not authorized to view the resource"),
             @ApiResponse(code = 403, message = "Accessing the resource you were trying to reach is forbidden"),
             @ApiResponse(code = 404, message = "The resource you were trying to reach is not found")})
-    @DeleteMapping("/cars/{id}")
+    @DeleteMapping(PATH + "/{id}")
     public ResponseEntity<String> deleteCar(@PathVariable long id) {
         carService.deleteCar(id);
         return new ResponseEntity<>(HttpStatus.OK);
