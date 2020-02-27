@@ -80,11 +80,6 @@ public class CarController {
         return new ResponseEntity<>(CarMapper.INSTANCE.carToCarDTO(car), HttpStatus.OK);
     }
 
-
-    //TODO: Beispiel für Config über Environment Variables!!
-    @Value("${beispiel.config}")
-    String beispielConfig;
-
     @ApiOperation(value = "Get all existing cars", response = CarDTO.class, responseContainer = "List")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successfully fetched cars"),
@@ -93,7 +88,6 @@ public class CarController {
     })
     @GetMapping("/cars")
     public ResponseEntity<List<CarDTO>> getAllCars() {
-        LOGGER.info("Beispiel Config: " + beispielConfig);
         List<Car> cars = carService.getAllCars();
         return new ResponseEntity<>(CarMapper.INSTANCE.listCarToCarDTOs(cars), HttpStatus.OK);
     }
