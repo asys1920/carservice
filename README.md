@@ -1,5 +1,5 @@
 # Car Service
-##Table of Contents
+## Table of Contents
 
 - [Description] (#description)
 - [Documentation] (#documentation)
@@ -9,7 +9,7 @@
 - [Testing] (#testing)
 - [API] (#api)
 
-##Description
+## Description
 ![GitHub release (latest by date)](https://img.shields.io/github/v/release/asys1920/gateway)
 
 This microservice is part of the car-rental project which was built
@@ -21,14 +21,14 @@ the cars.
 
 TODO
 
-##Documentation
+## Documentation
 See Wiki Pages / Management project.
-##Features
-##Requirements
-###Local
-###Docker
-##Quick Start / Setup
-###Run Local
-###Run Docker
-##Testing
-##API
+## Features
+## Requirements
+### Local
+### Docker
+## Quick Start / Setup
+### Run Local
+### Run Docker
+## Testing
+## API
