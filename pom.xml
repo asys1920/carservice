@@ -15,10 +15,6 @@
     <packaging>jar</packaging>
     <description>Service for car management</description>
 
-    <properties>
-        <java.version>1.8</java.version>
-    </properties>
-
     <dependencies>
         <dependency>
             <groupId>com.asys1920</groupId>
