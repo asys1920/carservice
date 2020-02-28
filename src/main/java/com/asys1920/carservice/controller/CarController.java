@@ -14,7 +14,6 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -27,10 +26,9 @@ import java.util.Set;
 @RestController
 public class CarController {
 
+    private static final Logger LOG = LoggerFactory.getLogger(CarController.class);
     private static final String PATH = "/cars";
     private final CarService carService;
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(CarController.class);
 
 
     public CarController(CarService carService) {
@@ -53,8 +51,7 @@ public class CarController {
     @PostMapping(PATH)
     public ResponseEntity<CarDTO> createCar(@RequestBody CarDTO carDTO) throws ValidationException, IllegalVehicleTypeException, CarAlreadyExistsException {
         validateCarDTO(carDTO);
-
-
+        LOG.trace(String.format("DELETE %s/%d initiated", PATH, carDTO.getId()));
         if (!VehicleType.contains(carDTO.getVehicleType())) {
             throw new IllegalVehicleTypeException();
         }
@@ -66,6 +63,7 @@ public class CarController {
 
         Car car = carService.createCar(carTemp);
 
+        LOG.trace(String.format("DELETE %s/%d XYZ", PATH, carDTO.getId()));
         return new ResponseEntity<>(CarMapper.INSTANCE.carToCarDTO(car), HttpStatus.CREATED);
     }
 
@@ -77,7 +75,9 @@ public class CarController {
             @ApiResponse(code = 404, message = "The resource you were trying to reach is not found")})
     @GetMapping(PATH + "/{id}")
     public ResponseEntity<CarDTO> getCar(@PathVariable long id) {
+        LOG.trace(String.format("GET %s/%d initiated", PATH, id));
         Car car = carService.getCar(id);
+        LOG.trace(String.format("GET %s/%d completed", PATH, id));
         return new ResponseEntity<>(CarMapper.INSTANCE.carToCarDTO(car), HttpStatus.OK);
     }
 
@@ -89,7 +89,9 @@ public class CarController {
     })
     @GetMapping(PATH)
     public ResponseEntity<List<CarDTO>> getAllCars() {
+        LOG.trace(String.format("GET %s initiated", PATH));
         List<Car> cars = carService.getAllCars();
+        LOG.trace(String.format("GET %s completed", PATH));
         return new ResponseEntity<>(CarMapper.INSTANCE.listCarToCarDTOs(cars), HttpStatus.OK);
     }
 
@@ -101,7 +103,9 @@ public class CarController {
             @ApiResponse(code = 404, message = "The resource you were trying to reach is not found")})
     @DeleteMapping(PATH + "/{id}")
     public ResponseEntity<String> deleteCar(@PathVariable long id) {
+        LOG.trace(String.format("DELETE %s/%d initiated", PATH, id));
         carService.deleteCar(id);
+        LOG.trace(String.format("DELETE %s/%d completed", PATH, id));
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
