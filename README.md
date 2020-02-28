@@ -14,7 +14,7 @@
 This microservice is part of the car-rental project which was built
 by the Asys course 19/20 at the TH Bingen.
 
-It manages the cars of the car-rental and keeps track of all cars
+It manages the cars of the car-rental, keeps track of all cars
 the car-rental has to offer and keeps track of the status of
 the cars.
 
