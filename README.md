@@ -9,7 +9,7 @@
 - [API](#api)
 
 ## Description
-![GitHub release (latest by date)](https://img.shields.io/github/v/release/asys1920/carservice)
+![GitHub release (latest by date)][release-badge](https://github.com/asys1920/carservice/releases)
 
 This microservice is part of the car-rental project which was built
 by the Asys course 19/20 at the TH Bingen.
@@ -49,3 +49,8 @@ GET | /cars | {id} | N/A | Gets the car with the specified ID
 POST | /cars | N/A | Car in JSON Format | Creates the Car Specified in the Request Body
 DELETE | /cars | {id} | N/A | Deletes the car with the specified ID
 PATCH | /cars | N/A | Car in JSON Format | Updates the car  specified in the request body
+
+
+
+
+[release-badge]: (https://img.shields.io/github/v/release/asys1920/carservice)
