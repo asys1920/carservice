@@ -1,13 +1,13 @@
 # Car Service
 ## Table of Contents
 
-- [Description] (#description)
-- [Documentation] (#documentation)
-- [Features] (#features)
-- [Requirements] (#requirements)
-- [Quick Start / Setup] (#quick start / setup)
-- [Testing] (#testing)
-- [API] (#api)
+- [Description](#description)
+- [Documentation](#documentation)
+- [Features](#features)
+- [Requirements](#requirements)
+- [Quick Start / Setup](#quick-start--setup)
+- [Testing](#testing)
+- [API](#api)
 
 ## Description
 ![GitHub release (latest by date)](https://img.shields.io/github/v/release/asys1920/gateway)
