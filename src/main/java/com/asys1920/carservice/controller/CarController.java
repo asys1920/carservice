@@ -108,4 +108,12 @@ public class CarController {
         LOG.trace(String.format("DELETE %s/%d completed", PATH, id));
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+    @PatchMapping("/cars/")
+    public ResponseEntity<CarDTO> updateCar(@RequestBody CarDTO carDTO) throws ValidationException {
+        validateCarDTO(carDTO);
+        Car car = CarMapper.INSTANCE.carDTOToCar(carDTO);
+        car = carService.createCar(car);
+        return new ResponseEntity<>(CarMapper.INSTANCE.carToCarDTO(car), HttpStatus.OK);
+    }
 }

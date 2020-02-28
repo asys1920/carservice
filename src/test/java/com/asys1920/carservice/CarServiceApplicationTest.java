@@ -14,8 +14,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -178,6 +177,50 @@ class CarServiceApplicationTest {
                 .andExpect(status().isConflict());
     }
 
+    @Test
+    public void shouldReturnErrorMessage_When_DeletingCar_IdNotFound() throws Exception {
+        mockMvc.perform(delete("/cars/" + getRandomId())
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void shouldReturnOk_When_DeletingCar() throws Exception {
+        JSONObject car = getValidCar();
+        car.put("id", 150);
+        car.put("name", "TestCar3");
+
+        mockMvc.perform(post("/cars/")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(car.toString())
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isCreated());
+
+        mockMvc.perform(delete("/cars/" + 150)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void shouldReturnOk_WhenUpdatingCar() throws Exception {
+        JSONObject car = getValidCar();
+        car.put("id", 100);
+        car.put("name", "TestCar4");
+
+        mockMvc.perform(post("/cars/")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(car.toString())
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isCreated());
+
+        car.put("brand", "MyFakeBrand");
+
+        mockMvc.perform(patch("/cars/")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(car.toString())
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+    }
 
 
     private JSONObject getValidCar() throws JSONException {
