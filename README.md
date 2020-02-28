@@ -9,7 +9,7 @@
 - [API](#api)
 
 ## Description
-![GitHub release (latest by date)](https://img.shields.io/github/v/release/asys1920/gateway)
+![GitHub release (latest by date)](https://img.shields.io/github/v/release/asys1920/carservice)
 
 This microservice is part of the car-rental project which was built
 by the Asys course 19/20 at the TH Bingen.
