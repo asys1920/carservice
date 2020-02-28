@@ -18,14 +18,19 @@ It manages the cars of the car-rental and keeps track of all cars
 the car-rental has to offer and keeps track of the status of
 the cars.
 
-TODO
+The Microservice can be monitored by Prometheus.
+
+Logs can be sent to Elasticsearch/Logstash using Filebeat.
 
 ## Documentation
 See [Management project](https://github.com/asys1920/management) for a documentation of the whole Car-Rental project.
 ## Features
+This microservice can create, update, delete and read cars from a local H2 Database. Furthermore, it exposes health,
+info and shutdown endpoints using Spring Boot Actuator. By exposing a special /actuator/prometheus endpoint it can
+be monitored using Prometheus. By using Filebeat the logs the microservice generates are sent to Elasticsearch/Logstash.
 
 ## Requirements
-
+A JDK with at least Java Version 11.
 
 ### Local
 ### Docker
