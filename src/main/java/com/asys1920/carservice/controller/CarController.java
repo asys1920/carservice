@@ -95,7 +95,7 @@ public class CarController {
         return new ResponseEntity<>(CarMapper.INSTANCE.listCarToCarDTOs(cars), HttpStatus.OK);
     }
 
-    @ApiOperation(value = "Delete a existing car", response = UserDTO.class)
+    @ApiOperation(value = "Delete an existing car", response = UserDTO.class)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successfully deleted the user"),
             @ApiResponse(code = 401, message = "You are not authorized to view the resource"),
@@ -109,11 +109,19 @@ public class CarController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    @ApiOperation(value = "Update an existing car", response = CarDTO.class)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Successfully updated car"),
+            @ApiResponse(code = 401, message = "You are not authorized to view the resource"),
+            @ApiResponse(code = 403, message = "Accessing the resource you were trying to reach is forbidden")
+    })
     @PatchMapping(PATH)
     public ResponseEntity<CarDTO> updateCar(@RequestBody CarDTO carDTO) throws ValidationException {
+        LOG.trace(String.format("PATCH %s/%d initiated", PATH, carDTO.getId()));
         validateCarDTO(carDTO);
         Car car = CarMapper.INSTANCE.carDTOToCar(carDTO);
         car = carService.createCar(car);
+        LOG.trace(String.format("PATCH %s/%d completed", PATH, carDTO.getId()));
         return new ResponseEntity<>(CarMapper.INSTANCE.carToCarDTO(car), HttpStatus.OK);
     }
 }
