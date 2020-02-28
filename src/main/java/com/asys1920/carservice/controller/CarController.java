@@ -105,7 +105,7 @@ public class CarController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @PatchMapping("/cars/")
+    @PatchMapping(PATH)
     public ResponseEntity<CarDTO> updateCar(@RequestBody CarDTO carDTO) throws ValidationException {
         validateCarDTO(carDTO);
         Car car = CarMapper.INSTANCE.carDTOToCar(carDTO);

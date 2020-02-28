@@ -6,7 +6,6 @@
 - [Features](#features)
 - [Requirements](#requirements)
 - [Quick Start / Setup](#quick-start--setup)
-- [Testing](#testing)
 - [API](#api)
 
 ## Description
@@ -22,13 +21,24 @@ the cars.
 TODO
 
 ## Documentation
-See Wiki Pages / Management project.
+See [Management project](https://github.com/asys1920/management) for a documentation of the whole Car-Rental project.
 ## Features
 ## Requirements
+
 ### Local
 ### Docker
 ## Quick Start / Setup
 ### Run Local
 ### Run Docker
-## Testing
+
 ## API
+To see a full documentation view the swagger documentation while running the microservice. You can
+find the Swagger Documentation at `http://<host>:<port>/swagger-ui.html` 
+
+Method | Endpoint | Parameters | Request Body | Description
+--- | --- | ---  | --- | ---
+GET | /cars | N/A | N/A | Gets all Cars
+GET | /cars | {id} | N/A | Gets the car with the specified ID
+POST | /cars | N/A | Car in JSON Format | Creates the Car Specified in the Request Body
+DELETE | /cars | {id} | N/A | Deletes the car with the specified ID
+PATCH | /cars | N/A | Car in JSON Format | Updates the car  specified in the request body
