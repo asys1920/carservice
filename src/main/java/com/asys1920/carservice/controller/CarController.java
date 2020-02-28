@@ -53,12 +53,12 @@ public class CarController {
         validateCarDTO(carDTO);
         LOG.trace(String.format("DELETE %s/%d initiated", PATH, carDTO.getId()));
         if (!VehicleType.contains(carDTO.getVehicleType())) {
-            throw new IllegalVehicleTypeException();
+            throw new IllegalVehicleTypeException("Vehicle type not supported");
         }
 
         Car carTemp = CarMapper.INSTANCE.carDTOToCar(carDTO);
         if (carService.carExists(carTemp)) {
-            throw new CarAlreadyExistsException();
+            throw new CarAlreadyExistsException("Car with same name already exists");
         }
 
         Car car = carService.createCar(carTemp);
