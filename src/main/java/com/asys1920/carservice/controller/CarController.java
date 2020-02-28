@@ -74,4 +74,12 @@ public class CarController {
         carService.deleteCar(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+    @PatchMapping("/cars/")
+    public ResponseEntity<CarDTO> updateCar(@RequestBody CarDTO carDTO) throws ValidationException {
+        validateCarDTO(carDTO);
+        Car car = CarMapper.INSTANCE.carDTOToCar(carDTO);
+        car = carService.createCar(car);
+        return new ResponseEntity<>(CarMapper.INSTANCE.carToCarDTO(car), HttpStatus.OK);
+    }
 }

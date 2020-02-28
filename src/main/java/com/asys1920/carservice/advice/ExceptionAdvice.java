@@ -60,7 +60,7 @@ public class ExceptionAdvice extends ResponseEntityExceptionHandler {
     }
 
     @Data
-    private class ErrorMessage {
+    private static class ErrorMessage {
         private final String cause = "VALIDATION FAILED";
         private List<String> description;
 
