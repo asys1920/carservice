@@ -39,7 +39,7 @@ A JDK with at least Java Version 11.
 ### Run Local
 ### Run Docker
 
-##Configuration
+## Configuration
 You can set the Port of the microservice using the `CAR_PORT` environment variable.
 The default Port used by the application is `8083`. To set the Address the Microservice
 listens on you can use the `CAR_ADDRESS` environment variable, its default value is
